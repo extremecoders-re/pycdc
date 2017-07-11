@@ -35,7 +35,7 @@ void PycLong::load(PycData* stream, PycModule*)
 
 bool PycLong::isEqual(PycRef<PycObject> obj) const
 {
-    if (type() != obj->type())
+    if (type() != obj.type())
         return false;
 
     PycRef<PycLong> longObj = obj.cast<PycLong>();
@@ -110,7 +110,7 @@ void PycFloat::load(PycData* stream, PycModule*)
 
 bool PycFloat::isEqual(PycRef<PycObject> obj) const
 {
-    if (type() != obj->type())
+    if (type() != obj.type())
         return false;
 
     PycRef<PycFloat> floatObj = obj.cast<PycFloat>();
@@ -151,7 +151,8 @@ bool PycComplex::isEqual(PycRef<PycObject> obj) const
 /* PycCFloat */
 void PycCFloat::load(PycData* stream, PycModule*)
 {
-    m_value_i64 = stream->get64();
+    Pyc_INT64 bits = stream->get64();
+    memcpy(&m_value, &bits, sizeof(bits));
 }
 
 
@@ -159,5 +160,6 @@ void PycCFloat::load(PycData* stream, PycModule*)
 void PycCComplex::load(PycData* stream, PycModule* mod)
 {
     PycCFloat::load(stream, mod);
-    m_imag_i64 = stream->get64();
+    Pyc_INT64 bits = stream->get64();
+    memcpy(&m_imag, &bits, sizeof(bits));
 }
